@@ -55,6 +55,7 @@ Essas escolhas foram feitas para garantir um desenvolvimento ágil, com código 
 ## 📝 Notas Adicionais
 
 - O projeto está configurado para utilizar banco de dados em memória (H2). Para ambientes de produção, recomenda-se configurar um banco relacional como PostgreSQL ou MySQL.
+- Ao inicializar a aplicação serão inseridos 25 incidentes para consultas e testes.
 - É possível acessar o console do H2 em [http://localhost:8080/h2-console](http://localhost:8080/h2-console) com as seguintes credenciais:
   - JDBC URL: `jdbc:h2:mem:db_diazero`
   - Usuário: `diazero`
