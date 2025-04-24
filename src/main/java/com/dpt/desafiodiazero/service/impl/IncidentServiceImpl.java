@@ -3,13 +3,13 @@ package com.dpt.desafiodiazero.service.impl;
 import com.dpt.desafiodiazero.model.Incident;
 import com.dpt.desafiodiazero.repository.IncidentRepository;
 import com.dpt.desafiodiazero.service.IncidentService;
+import com.dpt.desafiodiazero.service.exception.BadRequestException;
 import com.dpt.desafiodiazero.service.exception.BusinessException;
 import com.dpt.desafiodiazero.service.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 public class IncidentServiceImpl implements IncidentService {
@@ -37,13 +37,24 @@ public class IncidentServiceImpl implements IncidentService {
 
     @Override
     public Incident create(Incident incident) {
-        ofNullable(incident).orElseThrow(() -> new BusinessException("Incident to create must not be null."));
+        if (incident == null) {
+            throw new BusinessException("Incident to create must not be null.");
+        }
+        if (incident.getIdIncident() != null) {
+            throw new BadRequestException("ID must be null when creating a new incident.");
+        }
+        if (incident.getCreatedAt() == null){
+            incident.setCreatedAt(LocalDateTime.now());
+        }
         return this.repository.save(incident);
     }
 
     @Override
     public Incident update(Long id, Incident incident) {
         Incident dbIncident = this.findById(id);
+        if (!dbIncident.getIdIncident().equals(incident.getIdIncident())) {
+            throw new BusinessException("Update IDs must be the same.");
+        }
         return this.repository.save(incident);
     }
 
